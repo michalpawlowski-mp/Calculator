@@ -1,142 +1,117 @@
-const previousNumber = document.querySelector(".previusNumber");
-const currentNumber = document.querySelector(".currentNumber");
+const prevDisplay = document.querySelector(".previousNumber");
+const currDisplay = document.querySelector(".currentNumber");
 const buttons = document.querySelectorAll("button");
 
-let currentInput = "";
-let previousInput = "";
+let current = "";
+let previous = "";
 let operator = "";
 
-window.onload = () => {
-  loadFromLocalStorage();
-};
+window.onload = loadState;
 
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const value = button.dataset.value;
-
-    if (value === "clear-all") {
-      clearAll();
-    } else if (value === "undo") {
-      undo();
-    } else if (value === "negate") {
-      negate();
-    } else if (value === "equals") {
-      calculate();
-    } else if (value === "percentage" || value === "sqrt" || value === "power") {
-      specialOperations(value);
-    } else {
-      handleInput(value);
-    }
-
-    saveToLocalStorage();
-  });
-});
-
-const clearAll = () => {
-  currentInput = "";
-  previousInput = "";
+function clearAll() {
+  current = "";
+  previous = "";
   operator = "";
   updateDisplay();
-};
+}
 
-const undo = () => {
-  currentInput = currentInput.slice(0, -1);
+function undo() {
+  current = current.slice(0, -1);
   updateDisplay();
-};
+}
 
-const negate = () => {
-  if (currentInput) {
-    currentInput = (parseFloat(currentInput) * -1).toString();
+function negate() {
+  if (current) {
+    current = String(-parseFloat(current));
     updateDisplay();
   }
-};
+}
 
-const specialOperations = (operation) => {
-  let result;
-
-  const current = parseFloat(currentInput) || 0;
-
-  switch (operation) {
-    case "percentage":
-      result = current / 100;
-      break;
-    case "sqrt":
-      result = Math.sqrt(current);
-      break;
-    case "power":
-      result = Math.pow(current, 2);
-      break;
-    default:
-      return;
-  }
-
-  currentInput = result.toString();
+function special(op) {
+  let num = parseFloat(current) || 0;
+  if (op === "percentage") num /= 100;
+  if (op === "sqrt") num = Math.sqrt(num);
+  if (op === "power") num = num * num;
+  current = String(num);
+  previous = "";
   operator = "";
-  previousInput = "";
   updateDisplay();
-};
+}
 
-const handleInput = (value) => {
+function handleInput(value) {
   if (["+", "-", "*", "/"].includes(value)) {
-    if (currentInput) {
-      previousInput = currentInput;
+    if (current) {
+      previous = current;
       operator = value;
-      currentInput = "";
-    } else if (previousInput) {
+      current = "";
+    } else if (previous) {
       operator = value;
     }
-    updateDisplay();
   } else {
-    currentInput += value;
-    updateDisplay();
-  }
-};
-
-const calculate = () => {
-  if (currentInput && previousInput && operator) {
-    let result;
-
-    const prev = parseFloat(previousInput);
-    const current = parseFloat(currentInput);
-
-    switch (operator) {
-      case "+":
-        result = prev + current;
-        break;
-      case "-":
-        result = prev - current;
-        break;
-      case "*":
-        result = prev * current;
-        break;
-      case "/":
-        result = current === 0 ? "Error" : prev / current;
-        break;
-      default:
-        return;
+    if (value === ".") {
+      if (current.includes(".")) return;
+      if (current === "") current = "0";
     }
 
-    currentInput = result.toString();
-    operator = "";
-    previousInput = "";
-    updateDisplay();
+    if (value === "0") {
+      if (current === "0") return;
+    }
+
+    if (/[1-9]/.test(value)) {
+      if (current === "0") current = "";
+    }
+
+    current += value;
   }
-};
+  updateDisplay();
+}
 
-const updateDisplay = () => {
-  previousNumber.textContent = previousInput + " " + operator;
-  currentNumber.textContent = currentInput;
-};
+function calculate() {
+  if (!current || !previous || !operator) return;
 
-const saveToLocalStorage = () => {
-  localStorage.setItem("currentInput", currentInput);
-  localStorage.setItem("previousInput", previousInput);
+  let a = parseFloat(previous);
+  let b = parseFloat(current);
+  let result = 0;
+
+  if (operator === "+") result = a + b;
+  if (operator === "-") result = a - b;
+  if (operator === "*") result = a * b;
+  if (operator === "/") result = b === 0 ? "Error" : a / b;
+
+  current = String(result);
+  previous = "";
+  operator = "";
+  updateDisplay();
+}
+
+function updateDisplay() {
+  prevDisplay.textContent = previous + " " + operator;
+  currDisplay.textContent = current;
+  saveState();
+}
+
+function saveState() {
+  localStorage.setItem("current", current);
+  localStorage.setItem("previous", previous);
   localStorage.setItem("operator", operator);
-};
+}
 
-const loadFromLocalStorage = () => {
-  currentInput = localStorage.getItem("currentInput") || "";
-  previousInput = localStorage.getItem("previousInput") || "";
+function loadState() {
+  current = localStorage.getItem("current") || "";
+  previous = localStorage.getItem("previous") || "";
   operator = localStorage.getItem("operator") || "";
   updateDisplay();
-};
+}
+
+buttons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    let v = btn.dataset.value;
+
+    if (v === "clear-all") clearAll();
+    else if (v === "undo") undo();
+    else if (v === "negate") negate();
+    else if (v === "equals") calculate();
+    else if (["percentage", "sqrt", "power"].includes(v)) special(v);
+    else handleInput(v);
+  });
+});
