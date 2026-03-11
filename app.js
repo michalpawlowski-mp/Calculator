@@ -29,9 +29,11 @@ function negate() {
 
 function special(op) {
   let num = parseFloat(current) || 0;
+
   if (op === "percentage") num /= 100;
   if (op === "sqrt") num = Math.sqrt(num);
   if (op === "power") num = num * num;
+
   current = String(num);
   previous = "";
   operator = "";
@@ -73,10 +75,20 @@ function calculate() {
   let b = parseFloat(current);
   let result = 0;
 
-  if (operator === "+") result = a + b;
-  if (operator === "-") result = a - b;
-  if (operator === "*") result = a * b;
-  if (operator === "/") result = b === 0 ? "Error" : a / b;
+  switch (operator) {
+    case "+":
+      result = a + b;
+      break;
+    case "-":
+      result = a - b;
+      break;
+    case "*":
+      result = a * b;
+      break;
+    case "/":
+      result = b === 0 ? "Error" : a / b;
+      break;
+  }
 
   current = String(result);
   previous = "";
@@ -85,7 +97,7 @@ function calculate() {
 }
 
 function updateDisplay() {
-  prevDisplay.textContent = previous + " " + operator;
+  prevDisplay.textContent = `${previous} ${operator}`;
   currDisplay.textContent = current;
   saveState();
 }

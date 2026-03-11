@@ -4,15 +4,16 @@ Prosty, w pełni funkcjonalny kalkulator zrealizowany w oparciu o czysty HTML, C
 
 ### Funkcjonalności
 
-* **Podstawowe operacje:** Dodawanie, odejmowanie, mnożenie i dzielenie.
-* **Zaawansowane funkcje:** Procenty, pierwiastek kwadratowy, potęgowanie.
-* **Intuicyjny interfejs:** Czysty design i przejrzysty układ przycisków.
-* **Trwałość danych:** Kalkulator zapamiętuje ostatnie obliczenia dzięki `localStorage`.
+- **Podstawowe operacje:** Dodawanie, odejmowanie, mnożenie i dzielenie.
+- **Zaawansowane funkcje:** Procenty, pierwiastek kwadratowy, potęgowanie.
+- **Intuicyjny interfejs:** Czysty design i przejrzysty układ przycisków.
+- **Trwałość danych:** Kalkulator zapamiętuje ostatnie obliczenia dzięki `localStorage`.
 
 ### Użyte technologie
-* HTML
-* CSS
-* JavaScript
+
+- HTML
+- CSS
+- JavaScript
 
 ---
 
@@ -24,3 +25,7 @@ Prosty, w pełni funkcjonalny kalkulator zrealizowany w oparciu o czysty HTML, C
 ### Jak uruchomić projekt
 
 [Projekt](https://michalpawlowski-mp.github.io/Calculator/)
+
+### Autor
+
+[Michał Pawłowski (LinkedIn)](https://www.linkedin.com/in/michalpawlowski-mp/)
