@@ -8,6 +8,8 @@
 }
 
 :root {
+  color-scheme: light dark;
+
   --bg-color: #f0f4f8;
   --primary: #6c63ff;
   --secondary: #ff6584;
@@ -15,6 +17,24 @@
   --text: #333;
   --button-bg: #ffffff;
   --button-hover: #e0e0e0;
+  --screen-bg: #e8eef4;
+  --border-color: #ddd;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1a1f2e;
+    --primary: #8b85ff;
+    --secondary: #ff7b9b;
+    --accent: #5ce8c5;
+    --text: #e0e0e0;
+    --button-bg: #2a3244;
+    --button-hover: #3a4459;
+    --screen-bg: #21283a;
+    --border-color: #4a5568;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
 }
 
 body {
@@ -30,7 +50,7 @@ body {
 .calculator {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   border: 3px solid var(--accent);
-  background-color: #ffffff;
+  background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -44,7 +64,7 @@ body {
   width: 100%;
   font-size: 40px;
   padding: 20px;
-  background-color: var(--bg-color);
+  background-color: var(--screen-bg);
   border-radius: 10px;
   margin-bottom: 15px;
 }
