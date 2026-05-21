@@ -6,7 +6,7 @@ let current = "";
 let previous = "";
 let operator = "";
 
-window.onload = loadState;
+window.addEventListener("load", loadState);
 
 function clearAll() {
   current = "";
@@ -71,8 +71,8 @@ function handleInput(value) {
 function calculate() {
   if (!current || !previous || !operator) return;
 
-  let a = parseFloat(previous);
-  let b = parseFloat(current);
+  const a = parseFloat(previous);
+  const b = parseFloat(current);
   let result = 0;
 
   switch (operator) {
